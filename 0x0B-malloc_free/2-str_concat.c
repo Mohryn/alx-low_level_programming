@@ -1,43 +1,62 @@
 #include "main.h"
 #include <stdlib.h>
 
+int _strlen(char *s);
+
 /**
- * alloc_grid - returns a pointer to a 2 dimensional array of integers.
- * @width: width of the array.
- * @height: height of the array.
+ * str_concat - concatenates two strings
+ * @s1: 1st string
+ * @s2: 2nd string
+ * if NULL is passed, treat it as an empty string
  *
- * Return: pointer of an array of integers.
+ * Return: to a newly allocated space in memory which contains
+ * the contents of s1, followed by the contents of s2, and null terminated
+ * return NULL on failure
  */
-int **alloc_grid(int width, int height)
+char *str_concat(char *s1, char *s2)
 {
-	int **gridout;
-	int i, j;
+	int len_s1;
+	int len_s2;
+	int i;
+	int j = 0;
+	char *s3;
 
-	if (width < 1 || height < 1)
+	len_s1 = (s1 == NULL) ? 0 : _strlen(s1);
+	len_s2 = (s2 == NULL) ? 0 : _strlen(s2);
+
+	s3 = malloc(sizeof(char) * (len_s1 + len_s2 + 1));
+
+	if (s3 == NULL)
 		return (NULL);
 
-	gridout = malloc(height * sizeof(int *));
-	if (gridout == NULL)
+	/* copy s1 contents */
+	for (i = 0; i < len_s1; i++, j++)
+		s3[j] = s1[i];
+
+	/* copy s2 contents */
+	for (i = 0; i < len_s2; i++, j++)
+		s3[j] = s2[i];
+
+	s3[j] = '\0';
+
+	return (s3);
+}
+
+/**
+ * _strlen - finds the length of a string
+ * @s: address of first character in the string
+ *
+ * Return: length og the string
+ */
+int _strlen(char *s)
+{
+	int length = 0;
+
+	while (*s)
 	{
-		free(gridout);
-		return (NULL);
+		length++;
+		s++;
 	}
 
-	for (i = 0; i < height; i++)
-	{
-		gridout[i] = malloc(width * sizeof(int));
-		if (gridout[i] == NULL)
-		{
-			for (i--; i >= 0; i--)
-				free(gridout[i]);
-			free(gridout);
-			return (NULL);
-		}
-	}
-
-	for (i = 0; i < height; i++)
-		for (j = 0; j < width; j++)
-			gridout[i][j] = 0;
-
-	return (gridout);
+	return (length);
 }
